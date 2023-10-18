@@ -61,7 +61,6 @@ export default function DesktopNavbar() {
                         <p className='text-[13px] mr-1 font-semibold'>Category</p>
                         <BiFilter />
                     </button>
-                    <p>show: {showMobileCategoryList}</p>
                     {showMobileCategoryList===true&&categroyList!==null&&categroyList!==undefined&&(
                         <div className='absolute top-full left-0 bg-white shadow-lg w-[160px] min-h-[100px] h-auto py-2'>
                             {categroyList!==null&&categroyList.map((cat,i)=><div className='group w-full h-full p-1 cursor-pointer'>
