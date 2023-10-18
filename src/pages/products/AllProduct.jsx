@@ -209,7 +209,7 @@ export default function AllProduct() {
 
 const CategoryListComponent = () => {
   console.log('categoryList: ',categoryList)
-  return categoryList!==null?categoryList.categoryList.map((cat,i)=>{
+  return categoryList!==null?categoryList.map((cat,i)=>{
       if(cat.subcategories.length>0){
           return cat.subcategories.map((s_cat,i)=>{
               return <option key={i} value={s_cat.name}>{s_cat.name}</option>

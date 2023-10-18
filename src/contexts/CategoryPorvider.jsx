@@ -21,8 +21,8 @@ export function CategoryPorvider({children}){
           setCategoryList(res.data.categories)
         }
       }).catch(err=>{
+        setCategoryList([])
           setCatLoading(false)
-    
         })
     }
     const updateCategoryList = list => {
