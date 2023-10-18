@@ -5,11 +5,6 @@ import Navbar from "./../components/common/Navbar"
 import BottomNav from "@/components/common/navigationbar/MobileNav"
 import { Provider } from "react-redux"
 import store from "@/states/store"
-
-export const metadata = {
-  title: 'BGCExpress',
-  description: 'One of the best company in chattogram.',
-}
  
 export default function RootLayout({ children }) {
  return (

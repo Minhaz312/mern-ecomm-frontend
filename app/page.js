@@ -7,6 +7,12 @@ import TopProduct from "@/components/home/TopProduct";
 import ProductItem from "@/components/product/ProductItem";
 import SuggestedProduct from "@/components/home/SuggestedProduct";
 
+
+export const metadata = {
+  title: 'Lemda | Online shopping',
+  description: 'One of the best company in chattogram.',
+}
+
 export default async function Page() {
     try {
         const proudctRes  = await fetch(`${apiUrl}/product/get/${0}/${12}/all`,{next:{revalidate:60}});
