@@ -1,0 +1,27 @@
+.about-image-item-admin {
+    position: relative;
+}
+.about-image-item-admin img {
+    z-index: 1;
+}
+.about-image-item-admin div {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100% !important;
+    width: 100% !important;
+    background-color: rgb(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+.about-image-item-admin:hover {
+    display: none !important;
+}
+.about-image-item-admin:hover .about-image-item-admin div {
+    display: flex !important;
+}

@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,700;1,900&display=swap');
+:root {
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+
+  --body-background-color: #f3f3f3;
+  --primary-color: #3D5BA0;
+  --secondary-color: #865A9F;
+  --secondary-color\/30: #865a9f68;
+  --optional-color: #59C0E2;
+
+}
+
+
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  font-size: calc(16px + (18 - 16) * ((100vw - 300px) / (1920 - 300)));
+  font-family: 'Roboto', sans-serif;
+  color: #373f51;
+  font-weight: 400;
+  letter-spacing: 1px;
+  word-spacing: 3px;
+}
+.text-cs-primary {
+  color: var(--primary-color) !important;
+}
+.text-roboto {
+  font-family: 'Roboto', sans-serif !important;
+}
+.text-magenta {
+  color: var(--primary-color) !important;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--body-background-color);
+}
+.custom-container {
+  width: 100%;
+  margin: 0 auto;
+}
+.bg-sky {
+  background-color: var(--optional-color) !important;
+}
+
+.custom-btn {
+  text-decoration: none;
+  color: #F2F9FA;
+  font-weight: bold;
+  font-size: 16px;
+  /* display: inline-block; */
+  width: auto;
+  padding: 8px 20px;
+  background: linear-gradient(90deg, #59C0E2 -0.47%, #865A9F 102.49%);
+  border: 1px solid #F2F9FA;
+  border-radius: 50px;
+}
+.custom-btn:hover {
+  transition: all 0.33s;
+  color: #ffffff;
+  background: linear-gradient(90deg, #865A9F -0.47%, #59C0E2  102.49%);
+}
+.mx-sm-auto {
+  margin: 0 auto !important;
+}
+.logo {
+  height: 60px !important;
+}
+.footer-contact-list {
+  display: flex;
+  justify-content: space-between;
+}
+.footer-contact-list li a, .footer-contact-list li a div p{
+  text-decoration: none;
+  font-size: calc(16px + (18 - 16) * ((100vw - 300px) / (1920 - 300))) !important;
+}
+
+.footer-container {
+  width: 100% !important;
+}
+
+
+/* admin css */
+.admin-layout {
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+.leftbar {
+  background-color: var(--primary-color);
+  /* background-image: url("/images/background-glass-image.svg"); */
+  background-repeat: no-repeat;
+}
+.topbar {
+  position:fixed;
+}
+.leftbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-item a,.sidebar-item p,.sidenav-drop-header button{
+  text-decoration: none;
+  display: block;
+  color: white;
+  padding: 18px 16px;
+  border-radius: 0px;
+  font-size: 20px;
+  font-weight: 600;
+  transition: 0.23s;
+}
+.sidenav-drop-header button:focus {
+  color: white !important;
+}
+.nav-drop-menu-item {
+  text-decoration: none;
+  display: block;
+  color: white;
+  padding: 18px 16px;
+  border-radius: 0px;
+  font-size: 20px;
+  font-weight: 600;
+  transition: 0.23s;
+}
+.sidebar-item a:hover{
+  background: rgb(255,255,255,0.1);
+}
+.sidebar-item p:hover{
+  background: rgb(255,255,255,0.1);
+}
+.active-dash-item {
+  background: rgb(255,255,255,0.1);
+}
+.sidebar-item{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+
+@media screen and (min-width:700px){
+  .custom-container {
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .custom-btn {
+    font-size: 20px;
+    padding: 10px 25px;
+  }
+}
+@media screen and (min-width:768px) {
+  .logo {
+    height: 80px !important;
+  }
+  .custom-btn {
+    font-size: 20px;
+    padding: 15px 30px;
+  }
+}
+
+
+@media screen and (min-width:992px){
+  /* .footer-content {
+    grid-template-columns: 30% 35% 33% !important;
+  } */
+  .footer-container {
+    width: 80% !important;
+  }
+}
+@media screen and (min-width:1200px){
+  /* .footer-content {
+    grid-template-columns: 30% 35% 33% !important;
+  } */
+  .footer-container {
+    width: 90% !important;
+  }
+}
+@media screen and (min-width:1600px){
+  .custom-container {
+    margin: 0 auto;
+    width: 80% !important;
+  }
+  .footer-container {
+    width: 60% !important;
+  }
+}
+@media screen and (max-width:1599px){
+  .custom-container {
+    margin: 0 auto;
+    width: 90% !important;
+  }
+}
+
+
+
+
+
+/* @media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+} */

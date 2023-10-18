@@ -1,0 +1,6 @@
+.product-item:hover .product-item-cart {
+  display: block;
+}
+.product-details-image:hover img{
+  opacity: 0;
+}
