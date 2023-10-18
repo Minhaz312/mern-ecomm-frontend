@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import apiUrl from "./../apiUrl"
+import apiUrl from "../apiUrl"
 const initialValue = {
   loading:true,
   categoryList: [
