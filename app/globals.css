@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-blue {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+  .cs-container {
+    @apply w-full xl:w-9/12 md:w-11/12 md:mx-auto px-2 sm:px-5 md:px-0;
+  }
+  
+}
+
+
+.search-input:focus .search-suggestion {
+    display: block !important;
+}
+.sub-category-menue {display: none;}
+.category-main-item:hover .sub-category-menue{
+  display: block !important;
+}
+.product-item:hover .product-item-cart {
+    display: block;
+  }
+.product-details-image:hover img{
+  opacity: 0;
+}
+.nav-child {
+  display: none !important;
+}
+.nav-parent:hover .nav-child {
+  display: block !important;
+}
+.catetgory-arrow {
+  display: none !important;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height:100%;
+}
+.nav-parent:hover .catetgory-arrow {
+  display: flex !important;
+  align-items: center;
+}
+.ads-list .slick-dots {
+  bottom: 10px !important;
+}
+.ads-list .slick-dots li button {
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 50%);
+  height: 12px !important;
+  width: 12px !important;
+  border-radius: 50%;
+}
+.ads-list .slick-dots .slick-active button {
+  background: radial-gradient(circle at 50% 50%, rgb(0, 0, 0) 10%, rgb(229, 229, 229) 90%);
+}
+.ads-list .slick-dots li button::before {
+  content: "" !important;
+}
