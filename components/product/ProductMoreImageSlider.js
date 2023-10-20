@@ -17,7 +17,7 @@ export default function ProductMoreImageSlider({imageList}) {
     <div>
         {imageList.length<=5&&(
             <div className="flex justify-around gap-x-1">
-                {imageList.map((item,i)=><div>
+                {imageList.map((item,i)=><div key={i}>
                     <img src={`${api_uri}/images/${item}`} className="w-full h-[50px]" />
                     </div>
                 )}
@@ -25,7 +25,7 @@ export default function ProductMoreImageSlider({imageList}) {
         )}
         {imageList.length>5&&(
             <Slider {...settings}>
-                {imageList.map((item,i)=><div>
+                {imageList.map((item,i)=><div key={i}>
                     <img src={`${api_uri}/images/${item}`} className="w-auto h-[60px]" />
                 </div>)}
             </Slider>

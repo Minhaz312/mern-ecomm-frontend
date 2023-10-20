@@ -35,7 +35,10 @@ export default async function Page({params}) {
                       <p className='text-slate-800 text-xl font-semibold md:text-2xl'>৳ Price: <CurrencyFormat price={Number(productDetails.price)} currency='Tk' /></p>
                 </div>
                 {
-                  productDetails.quantity>0&&(<p className='bg-red-300/30 inline-block px-2 py-0.5 text-base my-2 rounded border border-red-500/20 font-semibold text-red-600 md:text-sm'>Stock out</p>)
+                  productDetails.quantity<1&&(<p className='bg-red-300/30 inline-block px-2 py-0.5 text-base my-2 rounded border border-red-500/20 font-semibold text-red-600 md:text-sm'>Stock out</p>)
+                }
+                {
+                  productDetails.quantity>0&&productDetails.quantity<10&&(<p className='bg-orange-300/40 inline-block px-2 py-0.5 text-base my-2 rounded border border-orange-500/20 font-semibold text-orange-500 md:text-sm'>{productDetails.quantity} available only</p>)
                 }
                 {/* product buy actions */}
                 <ProductDetailsActions productDetails={productDetails} />

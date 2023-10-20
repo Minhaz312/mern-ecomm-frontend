@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import { BiSearch, BiUser } from "react-icons/bi"
 
@@ -14,7 +14,6 @@ import apiUrl from "../../../app/apiUrl"
 export default function MobileNav() {
   const pathname = usePathname()
   const navigate = useRouter()
-
   const [categoryList,setCategoryList] = useState(null)
   const [openSubcat,setOpenSubcat] = useState(null)
 

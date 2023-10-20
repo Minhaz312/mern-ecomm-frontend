@@ -5,6 +5,8 @@ import Swal from 'sweetalert2'
 import apiUrl from "./../../apiUrl"
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import isLoggedIn from '@/utils/isLoggedIn'
+import { AUTH_TOKEN_NAME } from '@/utils/constants'
 export default function Page() {
 
   const navigate = useRouter()
@@ -34,8 +36,8 @@ export default function Page() {
         console.log(res)
         if(res.success === true) {
           const authToken = res.token;
-          localStorage.setItem("auth",authToken)
-          window.location = "/user/profile"
+          localStorage.setItem(AUTH_TOKEN_NAME,authToken)
+          navigate.replace("/user/profile")
         }else {
           setErrMsg("failed to login, try again!")
         }
@@ -47,8 +49,8 @@ export default function Page() {
   }
 
   useEffect(()=>{
-    if(localStorage.getItem("auth")!==null) {
-      navigate.push("/user/profile")
+    if(isLoggedIn()) {
+      navigate.push("/user/profile/me")
       setAuthenticationChecking(false)
     }else {
       setAuthenticationChecking(false)
@@ -63,13 +65,13 @@ export default function Page() {
 
   return (
     <div>
-        <div className='h-[65vh] flex justify-center items-center'>
-        <div className='w-1/2 bg-white rounded shadow-md mx-auto my-12 p-5'>
-          <h1 className='text-4xl font-semibold text-slate-900 text-center my-5 uppercase'>login to account</h1>
-            <input type="text" placeholder='Enter Mobile Number' onChange={e=>setMobile(e.target.value.trim())} className='w-full my-5 outline-none border-none bg-slate-100 px-4 py-2 focus:outline-slate-900/10' />
-            <input type="text" placeholder='Enter Password' onChange={e=>setPassword(e.target.value.trim())} className='w-full mb-5 outline-none border-none bg-slate-100 px-4 py-2 focus:outline-slate-900/10' />
-            <button className='w-full mt-5 mb-3 bg-slate-900 text-white font-semibold py-3 text-lg' onClick={handleLoginAccount}>{loading?"loading...":"Login"}</button>
-            <p className='text-center text-lg font-semibold text-slate-500'>Don't have account? <Link href="/user/signup" className='text-blue-500'>Signup</Link></p>
+        <div className='min:h-[65vh] flex justify-center items-center'>
+        <div className='w-[90%] md:w-1/2 bg-white rounded shadow-md mx-auto my-6 md:my-12 p-3 md:p-5'>
+          <h1 className='text-xl md:text-3xl lg:text-4xl font-semibold text-slate-900 text-center my-5 uppercase'>login to account</h1>
+            <input type="text" placeholder='Enter Mobile Number' onChange={e=>setMobile(e.target.value.trim())} className='w-full my-5 outline-none border-none bg-slate-100 py-1.5 px-2 md:px-4 md:py-2 focus:outline-slate-900/10' />
+            <input type="text" placeholder='Enter Password' onChange={e=>setPassword(e.target.value.trim())} className='w-full mb-5 outline-none border-none bg-slate-100 py-1.5 px-2 md:px-4 md:py-2 focus:outline-slate-900/10' />
+            <button className='w-full mt-3 mb-3 bg-slate-900 text-white font-semibold py-2 text-base md:mt-5 md:py-3 md:text-lg' onClick={handleLoginAccount}>{loading?"loading...":"Login"}</button>
+            <p className='text-center text-sm font-semibold text-slate-500 md:text-lg'>Don't have account? <Link href="/user/signup" className='text-blue-500'>Signup</Link></p>
           {/* <p className='text-center text-lg font-semibold text-slate-500'>or</p>
           <div>
             <button className='w-full my-3 bg-white text-black font-semibold py-2 text-md flex items-center border justify-center gap-3 shadow rounded'>

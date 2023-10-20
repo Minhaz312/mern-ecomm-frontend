@@ -17,7 +17,6 @@ export default function SuggestedProduct() {
                 },
                 body:JSON.stringify({keyword:histry})
             }).then(res=>res.json()).then(res=>{
-                console.log(res)
                 setLoadingProduct(false)
                 if(res.success === true) {
                     setSuggestedProductList(res.data)
@@ -36,12 +35,15 @@ export default function SuggestedProduct() {
         getSuggestedProduct()
     },[])
     if(suggestedProductList===null && loadingProduct===true){
-        return "loading..."
+        return ""
     }
     // #8690ff85
+    if(suggestedProductList.length<1){
+        return ""
+    }
   return (
     <div>
-        <div className='bg-[#6572ffc6] md:p-8 p-2 md:my-5 my-3 rounded-lg'>
+        <div className='bg-[#8690ff85] md:p-8 p-2 md:my-5 my-3 rounded-lg'>
         <h1 className="font-semibold text-slate-100 text-lg sm:text-xl mb-3 md:mb-5">Suggested Products</h1>
         <div className='grid grid-cols-2 md:gap-x-3 gap-x-2 gap-y-2 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3'>
             {

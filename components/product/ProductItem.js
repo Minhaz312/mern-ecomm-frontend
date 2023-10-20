@@ -9,13 +9,13 @@ export default function ProductItem({product}) {
         if(product.discount>0){
             return <div className='flex items-center justify-between'>
                 <div>
-                    <p className='text-lg text-slate-700 font-semibold mt-2 flex items-center gap-x-1'><TakaIcon /><CurrencyFormat price={discountedPrice} currency="tk" /></p>
+                    <p className='text-sm text-slate-700 font-semibold mt-2 flex items-center gap-x-1 md:text-lg'><TakaIcon /><CurrencyFormat price={discountedPrice} currency="tk" /></p>
                     <p className="text-[12px] flex font-semibold text-slate-500 md:text-sm"><del className="flex items-center gap-x-1"><TakaIcon opacity={0.5} /> <CurrencyFormat price={product.price} currency="tk" /></del><span className="mx-1">{product.discount}%</span></p>
                 </div>
             </div>
         }else {
             return <div className='flex items-center justify-between'>
-                <p className='text-sm text-slate-700 font-semibold mt-2 flex items-center gap-x-1'><TakaIcon /> <CurrencyFormat price={product.price} currency="tk" /></p>
+                <p className='text-sm text-slate-700 font-semibold mt-2 flex items-center gap-x-1 md:text-lg'><TakaIcon /> <CurrencyFormat price={product.price} currency="tk" /></p>
             </div>
         }
     }
@@ -26,7 +26,7 @@ export default function ProductItem({product}) {
                 <img src={`${api_uri}/images/${product.primaryImage}`} className="md:h-[160px] h-[100px] w-full object-contain" />
             </div>
             <div className="p-3">
-                <h3 className='text-slate-500 text-base font-semibold line-clamp-2'>{product.name}</h3>
+                <h3 className='text-slate-500 text-[13px] font-semibold line-clamp-2 md:text-base'>{product.name}</h3>
                 <PriceRenderer />
             </div>
         </Link>

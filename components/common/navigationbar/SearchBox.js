@@ -1,15 +1,11 @@
 "use client"
-import { increment } from '@/states/features/counterSlice'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiSearch, BiUser } from "react-icons/bi"
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+
 
 export default function SearchBox() {
-    const count = useSelector(state=>state.counter.value);
-    const dispatch = useDispatch()
     const [searchHistory, setSearchHistory] = useState(null)
 
     const [showSuggestion, setShowSuggestion] = useState(false)

@@ -1,7 +1,5 @@
 import Hero from "@/components/home/Hero";
-import apiUrl, { api_uri } from "./apiUrl";
-import { FaCartArrowDown } from "react-icons/fa";
-import Link from "next/link";
+import apiUrl from "./apiUrl";
 import LoadMoreProudct from "@/components/home/LoadMoreProudct";
 import TopProduct from "@/components/home/TopProduct";
 import ProductItem from "@/components/product/ProductItem";
@@ -42,7 +40,9 @@ export default async function Page() {
                        productList.map((item,i)=><ProductItem product={item} key={i} />)
                    }
                </div>
-               <LoadMoreProudct totalLoadedProduct={productList.length} totalProduct={productResJson.totalProudct} keyword="all" />
+               {productResJson.totalProudct>12&&(
+                   <LoadMoreProudct totalLoadedProduct={productList.length} totalProduct={productResJson.totalProudct} keyword="all" />
+               )}
            </div>
         )
     } catch (error) {

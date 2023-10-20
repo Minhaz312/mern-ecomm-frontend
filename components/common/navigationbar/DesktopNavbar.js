@@ -1,18 +1,23 @@
 "use client"
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { BiFilter, BiSearch, BiUser } from "react-icons/bi"
 import { HiOutlineHome } from "react-icons/hi"
 import { FiLogOut } from "react-icons/fi"
 import { LiaShoppingCartSolid } from "react-icons/lia"
 import SearchBox from './SearchBox'
-import Logout from './Logout'
-
+import { useDispatch, useSelector } from 'react-redux'
+import requestHeader from '@/utils/requestHeader'
+import { setLoading, storeUser } from '@/states/features/userSlice'
 import apiUrl from '@/app/apiUrl'
 
 export default function DesktopNavbar() {
+    const user = useSelector(state=>state.user)
+    const dispatch = useDispatch()
+
     const [showMobileCategoryList, setShowMobileCategoryList] = useState(false)
     const [categroyList, setCategoryList] = useState(null)
+
     const handleShowMobileCategoryList = async () => {
         if(showMobileCategoryList) {
             setShowMobileCategoryList(false)
@@ -23,14 +28,57 @@ export default function DesktopNavbar() {
                 try {
                     const res = await fetch(`${apiUrl}/category/get/all`);
                     const categoryRes = await res.json()
-                    console.log('catRes: ',categoryRes)
-                    setCategoryList(categoryRes.categories)
+                    if(categoryRes){
+                        setCategoryList(categoryRes.categories)
+                    }
                 } catch (error) {
                     setCategoryList(undefined)
                 }
             }
         }
     }
+    const handleLogout = () => {
+        localStorage.removeItem(AUTH_TOKEN_NAME)
+        window.location="/"
+    }
+    const getUserDetails = async () => {
+    if(user.data===null){
+      dispatch(setLoading(true))
+      const res = await fetch(`${apiUrl}/user/get`,requestHeader("json")).then(res=>res.json())
+      console.log("getUserDetails: ",res)
+      if(res) {
+          if(res.success===true) {
+            let totalPrice = 0
+            let totalProduct = 0
+            res.data.cartList.map(item=>{
+              totalPrice += item.totalPrice
+              totalProduct += item.quantity
+            })
+            dispatch(storeUser({operation:"success",data:{
+              address:res.data.address,
+              cartList:{
+                list:[...res.data.cartList],
+                totalPrice,
+                totalProduct
+              },
+              orderList:res.data.orderList,
+              mobile:res.data.mobile,
+              name:res.data.name
+            }}))
+          }else{
+            dispatch(storeUser({operation:"failed",data:undefined}))
+            router.push("/user/login")
+            setCheckingAuth(false)
+          }
+      }
+    }
+  }
+
+
+  useEffect(()=>{
+    getUserDetails()
+  },[])
+
   return (
     <div className='w-full bg-white shadow-sm sticky top-0 z-20 md:px-0'>
         <nav className='cs-container py-1.5'>
@@ -48,10 +96,26 @@ export default function DesktopNavbar() {
                         <li>
                             <Link href="/" className='text-slate-500 rounded-full border bg-slate-100/80 p-2 flex items-center gap-1 text-base sm:text-lg'><HiOutlineHome /></Link>
                         </li>
-                        <li>
-                            <Link href="/user/profile/cart" className='text-slate-500 rounded-full border bg-slate-100/80 p-2 flex items-center gap-1 text-base sm:text-lg'><LiaShoppingCartSolid /></Link>
-                        </li>
-                        <Logout />                 
+                        {user.data!==null&&user.data!==undefined&&(
+                            <li>
+                                <Link href="/user/profile/cart" className={`relative text-slate-500 rounded-full border bg-slate-100/80 ${user.data!==undefined&&user.data.cartList.list.length>0?"py-0.5":"py-2"} px-2 flex items-center gap-1 text-base sm:text-lg`}>
+                                    <LiaShoppingCartSolid />
+                                    {user.data!==undefined&&user.data!==null&&user.data.cartList.list.length>0&&(
+                                        <span className='font-bold text-slate-800'>{user.data.cartList.list.length}</span>
+                                    )}
+                                </Link>
+                            </li>
+                        )}
+                        {user.isLoading===false&&user.data!==null&&user.data!==undefined?<>
+                            <li>
+                                <Link href="/user/profile/me" className='flex items-center rounded-full border bg-slate-100/80 p-2 font-bold gap-1 text-base sm:text-lg'><BiUser /></Link>
+                            </li>
+                            <li>
+                                <button onClick={handleLogout} className='flex items-center rounded-full border bg-slate-100/80 py-1 px-3 font-regular ms-2 gap-1 text-sm cursor-pointer md:text-base'>Logout</button>
+                            </li>
+                            </>:<li>
+                                <Link href="/user/login" className='text-slate-500 rounded-full border bg-slate-100/80 p-2 flex items-center font-bold gap-1 text-base sm:text-lg'><BiUser /></Link>
+                            </li>}              
                     </ul>
                 </div>
             </div>
@@ -63,7 +127,7 @@ export default function DesktopNavbar() {
                     </button>
                     {showMobileCategoryList===true&&categroyList!==null&&categroyList!==undefined&&(
                         <div className='absolute top-full left-0 bg-white shadow-lg w-[160px] min-h-[100px] h-auto py-2'>
-                            {categroyList!==null&&categroyList.map((cat,i)=><div className='group w-full h-full p-1 cursor-pointer'>
+                            {categroyList!==null&&categroyList.map((cat,i)=><div key={i} className='group w-full h-full p-1 cursor-pointer'>
                                 <p className='text-[13px] font-semibold text-slate-600'>{cat.name}</p>
                                 {cat.subcategories.length>0&&<div className='absolute left-full top-0 min-h-full bg-slate-50 w-full hidden group-hover:block p-2'>
                                     {cat.subcategories.map((subcat,j)=><Link href={`/product/category/${subcat.name}`} className='block text-[13px] py-0.5 font-semibold text-slate-600'>{subcat.name}</Link>)}

@@ -4,8 +4,14 @@ import React, { useState } from 'react'
 import {useRouter} from 'next/navigation'
 import { BiMinus } from 'react-icons/bi'
 import { AiOutlinePlus } from 'react-icons/ai'
+import { useDispatch, useSelector } from 'react-redux'
+import isLoggedIn from '@/utils/isLoggedIn'
+import requestHeader from '@/utils/requestHeader'
+import { updateCartList } from '@/states/features/userSlice'
 
 export default function ProductDetailsActions({productDetails}) {
+    const dispatch = useDispatch()
+    const cartList = useSelector(state=>state.user.data)
     const [quantity, setQuantity] = useState(1)
     const [selectedSize, setSelectedSize] = useState(null)
     const [selectedColor, setSelectedColor] = useState(null)
@@ -13,7 +19,8 @@ export default function ProductDetailsActions({productDetails}) {
     const router = useRouter()
 
     const handleAdToCart = () => {
-        if(localStorage.getItem("auth")!==null){
+        console.log('old user data: ',cartList)
+        if(isLoggedIn()){
             if(productDetails.size.length>0 && selectedSize===null){
                 alert("Please select size")
             }else{
@@ -26,18 +33,21 @@ export default function ProductDetailsActions({productDetails}) {
                         size:selectedSize,
                         quantity,
                     }
-                    fetch(`${apiUrl}/product/cart/add`,{
+                    fetch(`${apiUrl}/cart/add`,requestHeader("json",{
                         method:"POST",
-                        headers: {
-                            "Content-Type":"application/json",
-                            "Authentication": localStorage.getItem("auth"),
-                        },
                         body:JSON.stringify(data)
-                    }).then(res=>res.json()).then(res=>{
+                    })).then(res=>res.json()).then(res=>{
+                        console.log('res data: ',res.data)
                         if(res.success===true) {
-                            router.push("/user/profile");
+                            console.log('res1: ',res)
+                            if(cartList!==undefined && cartList!==null){
+                                console.log('res2: ',res)
+                                dispatch(updateCartList({type:"increment",data:res.data}))
+                                console.log('new cartList: ',cartList.cartList)
+                            }
                         }
                     }).catch(err=>{
+                        console.log('error occured')
                         console.log(err)
                     })
                 }
