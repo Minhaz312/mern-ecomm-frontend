@@ -10,8 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import requestHeader from '@/utils/requestHeader'
 import { setLoading, storeUser } from '@/states/features/userSlice'
 import apiUrl from '@/app/apiUrl'
+import { AUTH_TOKEN_NAME } from '@/utils/constants'
+import { useRouter } from 'next/navigation'
 
 export default function DesktopNavbar() {
+    const router = useRouter()
     const user = useSelector(state=>state.user)
     const dispatch = useDispatch()
 
@@ -45,7 +48,6 @@ export default function DesktopNavbar() {
     if(user.data===null){
       dispatch(setLoading(true))
       const res = await fetch(`${apiUrl}/user/get`,requestHeader("json")).then(res=>res.json())
-      console.log("getUserDetails: ",res)
       if(res) {
           if(res.success===true) {
             let totalPrice = 0
@@ -68,7 +70,6 @@ export default function DesktopNavbar() {
           }else{
             dispatch(storeUser({operation:"failed",data:undefined}))
             router.push("/user/login")
-            setCheckingAuth(false)
           }
       }
     }

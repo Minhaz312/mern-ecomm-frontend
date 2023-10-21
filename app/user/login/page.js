@@ -37,7 +37,7 @@ export default function Page() {
         if(res.success === true) {
           const authToken = res.token;
           localStorage.setItem(AUTH_TOKEN_NAME,authToken)
-          navigate.replace("/user/profile")
+          window.location.href = "/user/profile/me"
         }else {
           setErrMsg("failed to login, try again!")
         }
