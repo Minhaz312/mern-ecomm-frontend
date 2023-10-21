@@ -12,6 +12,7 @@ import { setLoading, storeUser } from '@/states/features/userSlice'
 import apiUrl from '@/app/apiUrl'
 import { AUTH_TOKEN_NAME } from '@/utils/constants'
 import { useRouter } from 'next/navigation'
+import isLoggedIn from '@/utils/isLoggedIn'
 
 export default function DesktopNavbar() {
     const router = useRouter()
@@ -45,7 +46,7 @@ export default function DesktopNavbar() {
         window.location="/"
     }
     const getUserDetails = async () => {
-    if(user.data===null){
+    if(user.data===null && isLoggedIn()===true){
       dispatch(setLoading(true))
       const res = await fetch(`${apiUrl}/user/get`,requestHeader("json")).then(res=>res.json())
       if(res) {
@@ -67,9 +68,6 @@ export default function DesktopNavbar() {
               mobile:res.data.mobile,
               name:res.data.name
             }}))
-          }else{
-            dispatch(storeUser({operation:"failed",data:undefined}))
-            router.push("/user/login")
           }
       }
     }
