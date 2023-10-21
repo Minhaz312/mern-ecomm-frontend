@@ -12,7 +12,7 @@ export default async function Page({params}) {
     if(totalAvailable>0){
       return (
         <div className='min-h-[60vh]'>
-          <h2 className='text-slate-400 mt-4 text-xl font-regular'>{totalAvailable} product found for "{category}"</h2>
+          <h2 className='text-slate-500 mt-2 md:mt-4 text-base md:text-xl font-regular'>{totalAvailable} product found for "{category}"</h2>
           <div className='my-5  grid-cols-2 grid gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6'>
                 {
                     productList.map((item,i)=><ProductItem key={i} product={item} />)

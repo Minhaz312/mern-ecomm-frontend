@@ -46,14 +46,13 @@ export const userSlice = createSlice({
       let oldList = state.data.cartList.list;
       const oldCartItem = oldList.find(p=>p._id.toString()===data.cartId.toString())
       const index = oldList.findIndex(p=>p._id.toString()===data.cartId.toString());
-      oldList.splice(index,1)
       let newCartItem = {quantity:data.quantity,totalPrice:data.totalPrice}
       for (const key in oldCartItem) {
         if(key!=="quantity"&&key!=="totalPrice"){
           newCartItem[key] = oldCartItem[key]
         }
       }
-      oldList.push(newCartItem)
+      oldList.splice(index,1,newCartItem)
       let newData = {}
       for (const key in state.data) {
         if(key==="cartList"){
