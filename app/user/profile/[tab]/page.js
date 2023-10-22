@@ -9,11 +9,6 @@ import React, { useEffect, useState } from 'react'
 import { BiEditAlt } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
 
-export const metadata = {
-  title: 'Lemda | Profile',
-  description: 'One of the best company in chattogram.',
-}
-
 
 export default function Page({params}) {
 
