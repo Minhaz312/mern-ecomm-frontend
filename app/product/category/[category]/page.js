@@ -1,8 +1,16 @@
 import apiUrl,{ api_uri } from '@/app/apiUrl';
-import Link from 'next/link';
-import { FaCartArrowDown } from 'react-icons/fa';
 import LoadMoreProudct from '@/components/home/LoadMoreProudct';
 import ProductItem from '@/components/product/ProductItem';
+
+export async function generateMetadata({ params }) {
+  return {
+    title: `lembda | ${params.category}`,
+    openGraph: {
+      images: "/images/logo.png",
+    },
+  }
+}
+
 export default async function Page({params}) {
     const {category} = params
     const proudctRes  = await fetch(`${apiUrl}/product/get/category/${category}`,{next:{revalidate:0}});

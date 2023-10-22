@@ -1,8 +1,20 @@
 import apiUrl, { api_uri } from '@/app/apiUrl';
 import CurrencyFormat from '@/components/common/CurrencyFormat';
+import TakaIcon from '@/components/icon/TakaIcon';
 import ProductDetailsActions from '@/components/product/ProductDetailsActions';
 import ProductItem from '@/components/product/ProductItem';
 import ProductMoreImageSlider from '@/components/product/ProductMoreImageSlider';
+
+export async function generateMetadata({ params }) {
+  const product = await fetch(`${apiUrl}/product/get/${params.productId}`).then(res=>res.json())
+  console.log('metadata product res: ',product)
+  return {
+    title: product.data.name,
+    openGraph: {
+      images: [`${api_uri}/images/${product.data.primaryImage}`],
+    },
+  }
+}
 
 export default async function Page({params}) {
   const {productId,slug} = params;
@@ -17,7 +29,7 @@ export default async function Page({params}) {
         <div className='grid grid-cols-12 gap-x-5'>
             <div className='col-span-12 sm:col-span-5 p-3'>
             <div className='rounded-lg w-full'>
-              <img src={`${api_uri}/images/${productDetails.primaryImage}`} className='h-[200px] w-full object-contain md:h-full' />
+              <img src={`${api_uri}/images/${productDetails.primaryImage}`} className='h-[200px] w-full object-contain md:h-[400px]' />
               {productDetails.images.length>0&&(
                 <div className='relative'>
                     <ProductMoreImageSlider imageList={productDetails.images} />
@@ -29,10 +41,14 @@ export default async function Page({params}) {
                 <h1 className='text-xl font-semibold text-slate-800 mb-5 xl:text-2xl'>{productDetails.name}</h1>
                 <div className='flex items-center my-4 gap-3'>
                     {productDetails.discount>0&&(<div>
-                      <p className='px-2 rounded py-0.5 bg-green-500/10 border border-green-700/20 text-green-600 font-semibold text-[13px]'>{productDetails.discount}% off</p>
-                      <p className='text-slate-500 line-through'><CurrencyFormat price={discountedPrice} currency='Tk' /></p>
+                      <p className='px-2 rounded py-0.5 bg-green-500/10 border border-green-700/20 text-green-600 font-semibold text-[13px] md:text-base'>{productDetails.discount}% off</p>
                     </div>)}
-                      <p className='text-slate-800 text-xl font-semibold md:text-2xl'>৳ Price: <CurrencyFormat price={Number(productDetails.price)} currency='Tk' /></p>
+                    <div className='flex items-center gap-x-3'>
+                      <p className='text-slate-800 text-xl flex items-center gap-x-2 font-semibold md:text-2xl'><TakaIcon size={15} /> Price: <CurrencyFormat price={Number(discountedPrice)} currency='Tk' /></p>
+                      {productDetails.discount>0&&(<div>
+                      <p className='text-slate-500 line-through text-xl'><CurrencyFormat price={productDetails.price} currency='Tk' /></p>
+                    </div>)}                      
+                    </div>
                 </div>
                 {
                   productDetails.quantity<1&&(<p className='bg-red-300/30 inline-block px-2 py-0.5 text-base my-2 rounded border border-red-500/20 font-semibold text-red-600 md:text-sm'>Stock out</p>)

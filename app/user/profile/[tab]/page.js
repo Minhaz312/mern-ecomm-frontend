@@ -1,6 +1,5 @@
 "use client"
-import apiUrl, { api_uri } from '@/app/apiUrl'
-import CurrencyFormat from '@/components/common/CurrencyFormat'
+import apiUrl from '@/app/apiUrl'
 import Modal from '@/components/common/Modal'
 import CartList from '@/components/profile/CartList'
 import OrderList from '@/components/profile/OrderList'
@@ -9,6 +8,12 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { BiEditAlt } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
+
+export const metadata = {
+  title: 'Lemda | Profile',
+  description: 'One of the best company in chattogram.',
+}
+
 
 export default function Page({params}) {
 
@@ -79,7 +84,7 @@ export default function Page({params}) {
             <Link href="/" className='bg-blue-200 border-2 rounded-2xl py-1 px-3 text-slate-600 font-semibold mt-6 inline-block'>Continue Shopping</Link>
           </div>
         </div>
-        <div className={`col-span-12 md:col-span-3 border-t sm:border-l px-2 mt-5 sm:border-t-0`}>
+        <div className={`col-span-12 md:col-span-3 border-t px-2 mt-5 sm:border-t-0`}>
         <div className='flex justify-center w-full py-3'>
               <img src='/user.png' className="h-[120px] w-[120px] " />
             </div>

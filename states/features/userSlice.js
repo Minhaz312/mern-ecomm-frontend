@@ -56,11 +56,15 @@ export const userSlice = createSlice({
       let newData = {}
       for (const key in state.data) {
         if(key==="cartList"){
-          newData[key] = oldList
+          console.log('state totalPrice: ',state.data.cartList.totalProduct)
+          console.log('data totalPrice: ',data.quantity)
+          const newList = {list:oldList,totalPrice:state.data.cartList.totalPrice-oldCartItem.totalPrice+data.totalPrice,totalProduct:state.data.cartList.totalProduct-oldCartItem.quantity+data.quantity}
+          newData[key] = newList
         }else{
           newData[key] = state.data[key]
         }
       }
+      state.data = newData
     }
   },
 })

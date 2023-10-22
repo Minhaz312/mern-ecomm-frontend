@@ -1,4 +1,5 @@
 "use client"
+import { SEARCH_HISTORY } from '@/utils/constants'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -23,23 +24,24 @@ export default function SearchBox() {
 
     const handleOnSearchClick = () => {
         if(searchKeyword.trim()!==""){
-            let prevHistory = localStorage.getItem("histry");
-            if(prevHistory===null){
-                prevHistory = []
+            let searchHistory = localStorage.getItem(SEARCH_HISTORY);
+            console.log('old history: ',searchHistory)
+            if(searchHistory===null || searchHistory===""){
+                searchHistory = [searchKeyword]
             }else {
-                prevHistory = prevHistory.split(",")
-                if(prevHistory.includes(searchKeyword)===false){
-                    if(prevHistory.length===5){
-                        prevHistory.shift()
-                        prevHistory.push(searchKeyword)
-                    }else {
-                        prevHistory.push(searchKeyword)
-                    }
+                searchHistory = JSON.parse(searchHistory)
+                console.log('parsed history: ',searchHistory)
+                if(searchHistory.length===5){
+                    searchHistory.shift()
+                    searchHistory.unshift(searchKeyword)
+                }else {
+                    searchHistory.unshift(searchKeyword)
                 }
             }
-            let newHistry = prevHistory.join(",")
-            localStorage.setItem("histry",newHistry)
-            setSearchHistory(prevHistory)
+            localStorage.removeItem(SEARCH_HISTORY)
+            console.log('searchHistory: ',searchHistory)
+            localStorage.setItem(SEARCH_HISTORY,JSON.stringify(searchHistory))
+            setSearchHistory(searchHistory)
             navigate.push(`/product/search/${searchKeyword}`)
         }
     }
@@ -50,21 +52,18 @@ export default function SearchBox() {
     const SearchHistoryList = () => {
         if(searchHistory!==null){
             let list = []
-            for (let i = searchHistory.length-1; i >= 0; i--) {
-                list.push(<Link href={`/product/search/${searchHistory[i]}`} className='block text-slate-500 text-md m-2 cursor-pointer hover:bg-slate-100 p-1' key={i} >{searchHistory[i]}</Link>)
-            }
+            searchHistory.map((history,i)=>list.push(<Link href={`/product/search/${history}`} className='block text-slate-500 text-md m-2 cursor-pointer hover:bg-slate-100 p-1' key={i} >{searchHistory[i]}</Link>))
             return list.map(item=>item)
         }else {
             return ""
         }
     }
     useEffect(()=>{
-        let histryString = localStorage.getItem("histry")
-        if(histryString===null){
-            histryString = ""
+        let history = localStorage.getItem(SEARCH_HISTORY)
+        if(history===null){
+            history = JSON.stringify([])
         }
-        let historyArr = histryString.split(",")
-        setSearchHistory(historyArr)
+        setSearchHistory(JSON.parse(history))
     },[])
   return (
     <div className={`${showSuggestion?"drop-shadow-2xl rounded-xl":"shadow-none"}`}>

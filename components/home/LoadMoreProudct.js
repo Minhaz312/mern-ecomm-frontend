@@ -36,7 +36,7 @@ export default function LoadMoreProudct({totalLoadedProduct,totalProduct,keyword
             }
         </div>
         <div className={`${totalPageNumber>0 && page<totalPageNumber?"block":"hidden"} w-full flex justify-center`}>
-            <button onClick={handleLoadMoreProduct} className='md:px-12 px-3 py-1.5 rounded-md border-2 border-slate-300 md:my-5 my-4 font-semibold md:text-md text-[13px]'>{loading?"loading...":"load more"}</button>
+            <button onClick={handleLoadMoreProduct} className='md:px-12 px-3 py-1.5 rounded-md border-2 border-slate-300 md:my-5 my-4 font-semibold md:text-base text-[13px]'>{loading?"loading...":"load more"}</button>
         </div>
     </div>
   )
