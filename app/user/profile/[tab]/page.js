@@ -1,5 +1,6 @@
 "use client"
 import apiUrl from '@/app/apiUrl'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
 import Modal from '@/components/common/Modal'
 import CartList from '@/components/profile/CartList'
 import OrderList from '@/components/profile/OrderList'
@@ -8,6 +9,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { BiEditAlt } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
 
 
 export default function Page({params}) {
@@ -18,23 +20,35 @@ export default function Page({params}) {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [shippingAddress, setShippingAddress] = useState("")
   const [addressErr,setAddressErr] = useState(false)
+
+  const [ordering, setOrdering] = useState(false)
   
   
   const handlePlaceOrder = () => {
     if(shippingAddress.trim()===""){
       setAddressErr(true)
     }else{
+      setOrdering(true)
       fetch(`${apiUrl}/order/place/all-cart-product`,requestHeader("json",{
         method:"POST",
         body:JSON.stringify({shippingAddress:shippingAddress})
       })).then(res=>res.json()).then(res=>{
+        setOrdering(false)
         console.log("res: ",res)
         if(res.success === true) {
-          alert("order placed successfully!")
+          Swal.fire({
+            title:"Order Placed Successfully!",
+            icon:"success"
+          })
           getUserDetails()
           setPageTab("o")
         }
       }).catch(err=>{
+        setOrdering(false)
+        Swal.fire({
+          title:"Failed to place order!",
+          icon:"error"
+        })
         console.log(err)
       })
     }
@@ -99,7 +113,9 @@ export default function Page({params}) {
                 <p><span className='text-lg mb-3 font-semibold text-slate-600'>Total Product:</span><span className='text-xl font-bold text-slate-600 ml-2'>{user.data.cartList.totalProduct}</span></p>
                 <p><span className='text-lg mb-3 font-semibold text-slate-600'>Total Price:</span><span className='text-xl font-bold text-slate-600 ml-2'>{user.data.cartList.totalPrice}tk</span></p>
               </div>
-              <button className='bg-blue-600 hover:bg-blue-700 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>Place Order</button>
+              <button className='bg-blue-600 hover:bg-blue-700 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>
+                {ordering===true?<LoadingSpinner size={25} light={true} />:"Place Order"}
+              </button>
             </div>:""
             }
             

@@ -65,10 +65,27 @@ export const userSlice = createSlice({
         }
       }
       state.data = newData
+    },
+    deleteCartItem: (state,action) => {
+      const index = state.data.cartList.list.findIndex(p=>p._id.toString()===action.payload.cartId.toString());
+      let prevList = state.data.cartList.list.map(obj => ({ ...obj }));
+      console.log('prevList after delt: ',prevList)
+      prevList.splice(index,1);
+      console.log('prevList after delt: ',prevList)
+      let newTotalPrice = 0;
+      let newTotalProduct = 0;
+
+      prevList.map(item=>{
+        newTotalPrice += item.totalPrice
+        newTotalProduct += item.quantity
+      })
+      
+      const newList = {totalPrice:newTotalPrice,totalProduct:newTotalProduct,list:prevList}
+      state.data = {...state.data,cartList:newList}
     }
   },
 })
 
-export const { setLoading, storeUser,updateCartList, updateCartItem } = userSlice.actions
+export const { setLoading, storeUser,updateCartList, updateCartItem, deleteCartItem } = userSlice.actions
 
 export default userSlice.reducer

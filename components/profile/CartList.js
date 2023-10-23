@@ -1,25 +1,21 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import CurrencyFormat from '../common/CurrencyFormat'
 import { BsTrash } from 'react-icons/bs'
 import apiUrl, { api_uri } from '@/app/apiUrl'
 import requestHeader from '@/utils/requestHeader'
 import { useDispatch, useSelector } from 'react-redux'
 import { BiMinus, BiPlus } from 'react-icons/bi'
-import { updateCartItem } from '@/states/features/userSlice'
+import { deleteCartItem, updateCartItem } from '@/states/features/userSlice'
+import { MdDelete } from 'react-icons/md'
+import { IoCloseSharp } from 'react-icons/io5'
+import Swal from 'sweetalert2'
 export default function CartList() {
   const dispatch = useDispatch()
   const userData = useSelector(state=>state.user.data)
-    const handleDeleteCartItem = id => {
-    if(confirm("Are you sure to delete?")){
-      fetch(`${apiUrl}/product/cart/delete/${id}`,requestHeader("json",{
-        method:"DELETE"
-      })).then(res=>res.json()).then(res=>{
-      }).catch(err=>{
-        alert("failed to delete")
-      })
-    }
-  }
+
+  const [selectedCartItem, setSelectedCartItem] = useState([])
+
   const handleUpdateCartQuantity = async (item,type="inc") => {
     let data = {
       cartId:item._id,
@@ -27,32 +23,114 @@ export default function CartList() {
     if(type==="inc"&&item.quantity<10){
       data.quantity = item.quantity+1
       data.totalPrice = item.totalPrice+item.productPrice
-      dispatch(updateCartItem(data))
     }else if(type==="dec"&&item.quantity!==1){
       data.quantity = item.quantity-1
       data.totalPrice = item.totalPrice-item.productPrice
-      dispatch(updateCartItem(data))
     }else{
-      console.log('please look at your action')
+      alert('please look at your action')
+    }
+    if(data.quantity!==undefined){
+      console.log("not undefined")
+      const res = await fetch(`${apiUrl}/cart/update/quantity`,requestHeader("json",{
+        method:"POST",
+        body:JSON.stringify(data)
+      }))
+      if(res.ok){
+        dispatch(updateCartItem(data))
+      }
     }
     console.log('data: ',data)
-    // const res = await fetch(`${apiUrl}/cart/update/quantity`,requestHeader("json",{
-    //   method:"POST",
-    //   body:JSON.stringify({cartId:item._id})
-    // }))
-    // console.log('res of incrs: ',res)
   }
   useEffect(()=>{},[userData])
   if(userData===undefined || userData===null){
     return <h3 className='text-md text-center my-5 font-semibold text-slate-600'>Failed to load</h3>
   }
-  console.log('cart list asdf: ',userData.cartList)
+  
+  
+  const handleSelectCartItem = id => {
+    if(selectedCartItem.length<1){
+      setSelectedCartItem([id]);
+    }else{
+      const index = selectedCartItem.findIndex(p=>p===id)
+      if(index>-1){
+        let oldList = [...selectedCartItem];
+        oldList.splice(index,1)
+        setSelectedCartItem(oldList);
+      }else{
+        setSelectedCartItem(ps=>[...ps,id])
+      }
+    }
+  }
+
+
+
+  const handleDeleteCartItem = id => {
+    let deleteIdList = []
+    if(typeof id === "string"){
+      deleteIdList.push(id);
+    }else{
+      if(selectedCartItem.length>0){
+        selectedCartItem.map(item=>{
+          deleteIdList.push(item);
+        })
+      }
+    }
+
+    if(deleteIdList.length>0){
+      Swal.fire({
+          title:"Are you sure?",
+          icon:"question",
+          showDenyButton: true,
+          confirmButtonText: 'Delete',
+      }).then(go=>{
+        if(go.isConfirmed){
+          fetch(`${apiUrl}/cart/delete`,requestHeader("json",{
+            method:"DELETE",
+            body:JSON.stringify({id:deleteIdList})
+          })).then(res=>res.json()).then(res=>{
+            console.log('res: ',res)
+            if(res.success){
+              Swal.fire({
+                title:"Your cart cleared",
+                icon:"success"
+              })
+              if(typeof id === "string"){
+                dispatch(deleteCartItem({cartId:id}))
+              }else{
+                selectedCartItem.map(item=>{
+                  dispatch(deleteCartItem({cartId:item}))
+                })
+                setSelectedCartItem([])
+              }
+            }
+          }).catch(err=>{
+            Swal.fire({
+              title:"Failed to delete!",
+              text:"Please try again!",
+              icon:"error"
+            })
+            setSelectedCartItem([])
+          })
+        }
+      })
+    }
+
+    
+  }
+
   if(userData.cartList.list.length<1){
       return <h3 className='text-md text-center my-5 font-semibold text-slate-600'>no product added yet</h3>
     }
     return <div className='w-full'>
+      {selectedCartItem.length>0&&(<div className='flex justify-end mb-3'>
+        <button onClick={handleDeleteCartItem} className='flex items-center justify-center gap-x-2 px-2 py-1 bg-red-700 text-white font-semibold text-sm'>
+          <IoCloseSharp size={20} />
+          <p>delete {selectedCartItem.length} items</p>
+        </button>
+      </div>)}
           {
             userData.cartList.list.map((item,i)=><div key={i} className='flex border mb-1 odd:bg-slate-200/20 hover:bg-slate-200/40'>
+              <input type='checkbox' name="cart" checked={selectedCartItem.includes(item._id)} className='ml-3' onChange={handleSelectCartItem.bind(this,item._id)} />
                 <div className='p-2 '>
                   <img src={`${api_uri}/images/${item.productImage}`} className='h-[70px] w-[70px] object-cover' />
                 </div>

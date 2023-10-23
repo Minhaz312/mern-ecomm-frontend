@@ -37,13 +37,9 @@ export default function ProductDetailsActions({productDetails}) {
                         method:"POST",
                         body:JSON.stringify(data)
                     })).then(res=>res.json()).then(res=>{
-                        console.log('res data: ',res.data)
                         if(res.success===true) {
-                            console.log('res1: ',res)
                             if(cartList!==undefined && cartList!==null){
-                                console.log('res2: ',res)
                                 dispatch(updateCartList({type:"increment",data:res.data}))
-                                console.log('new cartList: ',cartList.cartList)
                             }
                         }
                     }).catch(err=>{

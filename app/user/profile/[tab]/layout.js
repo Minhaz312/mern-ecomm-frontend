@@ -17,7 +17,7 @@ export default function ProfileLayout({children}) {
   },[checkingAuth])
   if(checkingAuth){
     return (
-      <div className="min-h-[60vh] h-auto">
+      <div className="min-h-[60vh] h-auto flex justify-center items-center">
           please wait...
       </div>
     )

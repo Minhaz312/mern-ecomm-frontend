@@ -58,7 +58,7 @@ export default function OrderList({list}) {
               </td>            
               <td className='w-[20%] text-center'>{new Date(item.orderDate).toDateString()}</td>            
               <td className='w-[20%] text-center'>
-                <button className='cursor-pointer hover:bg-slate-200 px-3 py-2 hover:shadow-md hover:border-3' onClick={handleDeleteCartItem.bind(this,item._id)}><BsTrash /></button>
+                <button className='cursor-pointer hover:bg-slate-200 px-3 py-2 hover:shadow-md hover:border-3' ><BsTrash /></button>
               </td>            
             </tr>
             })
