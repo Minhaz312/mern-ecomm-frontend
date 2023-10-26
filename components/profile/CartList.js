@@ -14,9 +14,12 @@ export default function CartList() {
   const dispatch = useDispatch()
   const userData = useSelector(state=>state.user.data)
 
+  const [updatingCartItem, setUpdatingCartItem] = useState(false);
+
   const [selectedCartItem, setSelectedCartItem] = useState([])
 
   const handleUpdateCartQuantity = async (item,type="inc") => {
+    setUpdatingCartItem(true)
     let data = {
       cartId:item._id,
     }
@@ -36,6 +39,7 @@ export default function CartList() {
         body:JSON.stringify(data)
       }))
       if(res.ok){
+        setUpdatingCartItem(false)
         dispatch(updateCartItem(data))
       }
     }
@@ -140,10 +144,10 @@ export default function CartList() {
               </div>
               <div className='flex col-span-12 gap-x-4 sm:gap-x-10 sm:col-span-6'>
                 <div className='p-2 flex items-center gap-x-2'>
-                    <button className='px-1.5 py-1 bg-slate-200' onClick={handleUpdateCartQuantity.bind(this,item,"dec")}><BiMinus /></button>
+                    <button disabled={updatingCartItem} className='px-1.5 py-1 bg-slate-200' onClick={handleUpdateCartQuantity.bind(this,item,"dec")}><BiMinus /></button>
                     <p>{item.quantity}</p>
-                    <button className='px-1.5 py-1 bg-slate-200' onClick={handleUpdateCartQuantity.bind(this,item,"inc")}><BiPlus /></button>
-                </div>            
+                    <button disabled={updatingCartItem} className='px-1.5 py-1 bg-slate-200' onClick={handleUpdateCartQuantity.bind(this,item,"inc")}><BiPlus /></button>
+                </div>           
                 <div className='p-2 flex items-center text-center text-slate-600 font-semibold'><CurrencyFormat price={Number(item.totalPrice)} /></div>   
               </div>           
             </div>

@@ -16,7 +16,6 @@ export default function LoadMoreProudct({totalLoadedProduct,totalProduct,keyword
             setLoading(true)
             let skip = 12*page;
             fetch(`${apiUrl}/product/get/${skip}/12/${keyword}`,{next:{revalidate:60}}).then(res=>res.json()).then(res=>{
-                console.log(res)
                 if(res.success === true) {
                     setLoadedProduct(lp=>[...lp,...res.data]);
                     setPage(prev=>prev+1)

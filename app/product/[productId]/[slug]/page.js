@@ -2,8 +2,8 @@ import apiUrl, { api_uri } from '@/app/apiUrl';
 import CurrencyFormat from '@/components/common/CurrencyFormat';
 import TakaIcon from '@/components/icon/TakaIcon';
 import ProductDetailsActions from '@/components/product/ProductDetailsActions';
+import ProductImageRenderer from '@/components/product/ProductImageRenderer';
 import ProductItem from '@/components/product/ProductItem';
-import ProductMoreImageSlider from '@/components/product/ProductMoreImageSlider';
 
 export async function generateMetadata({ params }) {
   const product = await fetch(`${apiUrl}/product/get/${params.productId}`).then(res=>res.json())
@@ -29,12 +29,7 @@ export default async function Page({params}) {
         <div className='grid grid-cols-12 gap-x-5'>
             <div className='col-span-12 sm:col-span-5 p-3'>
             <div className='rounded-lg w-full'>
-              <img src={`${api_uri}/images/${productDetails.primaryImage}`} className='h-[200px] w-full object-contain md:h-[400px]' />
-              {productDetails.images.length>0&&(
-                <div className='relative'>
-                    <ProductMoreImageSlider imageList={productDetails.images} />
-                </div>
-              )}
+              <ProductImageRenderer primaryImage={productDetails.primaryImage} imageList={productDetails.images} />
             </div>
             </div>
             <div className='col-span-12 sm:col-span-7 p-3'>
