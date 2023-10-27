@@ -7,8 +7,9 @@ import MyData from '@/components/profile/MyData'
 import OrderList from '@/components/profile/OrderList'
 import requestHeader from '@/utils/requestHeader'
 import Link from 'next/link'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
+import { addNewOrderItem, makeEmptyCart } from '@/states/features/userSlice'
 
 const profileTabs = [
 	{id:1,name:"Cart List",tab:"cart"},
@@ -20,10 +21,12 @@ const profileTabs = [
 export default function Page({params}) {
 
   const user = useSelector(state=>state.user)
+  const dispatch = useDispatch();
 
   const [pageTab, setPageTab] = useState("cart")
   
   const [shippingAddress, setShippingAddress] = useState("")
+  const [cashOnDelivery,setCashOnDelivery] = useState(true);
   const [addressErr,setAddressErr] = useState(false)
 
   const [ordering, setOrdering] = useState(false)
@@ -45,7 +48,8 @@ export default function Page({params}) {
             title:"Order Placed Successfully!",
             icon:"success"
           })
-          getUserDetails()
+          dispatch(makeEmptyCart())
+          dispatch(addNewOrderItem({item:res.data}))
           setPageTab("o")
         }else{
           Swal.fire({
@@ -114,9 +118,29 @@ export default function Page({params}) {
                 <p><span className='text-lg mb-3 font-semibold text-slate-600'>Total Product:</span><span className='text-xl font-bold text-slate-600 ml-2'>{user.data.cartList.totalProduct}</span></p>
                 <p><span className='text-lg mb-3 font-semibold text-slate-600'>Total Price:</span><span className='text-xl font-bold text-slate-600 ml-2'>{user.data.cartList.totalPrice}tk</span></p>
               </div>
-              <button className='bg-primary hover:bg-primary/80 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>
-                {ordering===true?<LoadingSpinner size={25} light={true} />:"Check out"}
-              </button>
+              {/* <div>
+                <h3>Payment Method</h3>
+                <div className='flex gap-x-2 items-center'>
+                  {cashOnDelivery&&<input type='radio' checked className='' />}
+                  {cashOnDelivery===false&&<input type='radio' checked={false} onClick={()=>setCashOnDelivery(true)} className='' />}
+                  <p>Cash On Delivery</p>
+                </div>
+                <div className='flex gap-x-2 items-center'>
+                  {cashOnDelivery===false&&<input type='radio' checked className='' />}
+                  {cashOnDelivery&&<input type='radio' checked={false} onClick={()=>setCashOnDelivery(false)} className='' />}
+                  <p>Pay First</p>
+                </div>
+              </div> */}
+              {cashOnDelivery&&(
+                <button className='bg-primary hover:bg-primary/80 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>
+                  {ordering===true?<LoadingSpinner size={25} light={true} />:"Place Order"}
+                </button>
+              )}
+              {cashOnDelivery===false&&(
+                <button className='bg-primary hover:bg-primary/80 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>
+                  {ordering===true?<LoadingSpinner size={25} light={true} />:"Check Out"}
+                </button>
+              )}
             </div>:""
             }
             

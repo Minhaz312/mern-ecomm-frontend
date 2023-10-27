@@ -82,10 +82,36 @@ export const userSlice = createSlice({
       
       const newList = {totalPrice:newTotalPrice,totalProduct:newTotalProduct,list:prevList}
       state.data = {...state.data,cartList:newList}
+    },
+    makeEmptyCart: (state) => {
+      let data = {}
+      for (const key in state.data) {
+        if(key==="cartList"){
+          data.cartList = {
+            list:[],
+            totalPrice:0,
+            totalProduct:0
+          };
+        }else{
+          data[key] = state.data[key];
+        }
+      }
+      state.data = data;
+    },
+    addNewOrderItem: (state,action) => {
+      let data = {}
+      for (const key in state.data) {
+        if(key==="orderList"){
+          data.orderList = [...state.data.orderList,action.payload.item];
+        }else{
+          data[key] = state.data[key];
+        }
+      }
+      state.data = data;
     }
   },
 })
 
-export const { setLoading, storeUser,updateCartList, updateCartItem, deleteCartItem } = userSlice.actions
+export const { setLoading, storeUser,updateCartList, updateCartItem, deleteCartItem, makeEmptyCart, addNewOrderItem } = userSlice.actions
 
 export default userSlice.reducer
