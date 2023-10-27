@@ -123,7 +123,9 @@ export default function CartList() {
   }
 
   if(userData.cartList.list.length<1){
-      return <h3 className='text-md text-center my-5 font-semibold text-slate-600'>no product added yet</h3>
+      return <div className='h-full w-full flex justify-center items-center'>
+        <h3 className='text-md my-5 font-semibold text-slate-600 sm:text-xl'>No product added yet</h3>
+      </div>
     }
     return <div className='w-full'>
       {selectedCartItem.length>0&&(<div className='flex justify-end mb-3'>

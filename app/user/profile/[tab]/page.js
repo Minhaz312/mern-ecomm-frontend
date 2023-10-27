@@ -39,7 +39,7 @@ export default function Page({params}) {
         body:JSON.stringify({shippingAddress:shippingAddress})
       })).then(res=>res.json()).then(res=>{
         setOrdering(false)
-        console.log("res: ",res)
+        console.log("res: ",res.status)
         if(res.success === true) {
           Swal.fire({
             title:"Order Placed Successfully!",
@@ -47,6 +47,12 @@ export default function Page({params}) {
           })
           getUserDetails()
           setPageTab("o")
+        }else{
+          Swal.fire({
+            title:"Failed to place order!",
+            text:"Please try again! Contact with Us.",
+            icon:"error"
+          })
         }
       }).catch(err=>{
         setOrdering(false)
@@ -84,7 +90,7 @@ export default function Page({params}) {
                 </li>)}
             </ul>
         </div>
-        <div className='h-[300px] py-3 overflow-x-hidden overflow-y-auto'>
+        <div className='h-[300px] my-3 overflow-x-hidden overflow-y-auto'>
 			{pageTab==="cart"&&(<CartList />)}
         	{pageTab==="order-list"&&<OrderList list={user.data.orderList} />}
         	{pageTab==="profile"&&<div className='blcok sm:hidden'>
@@ -109,7 +115,7 @@ export default function Page({params}) {
                 <p><span className='text-lg mb-3 font-semibold text-slate-600'>Total Price:</span><span className='text-xl font-bold text-slate-600 ml-2'>{user.data.cartList.totalPrice}tk</span></p>
               </div>
               <button className='bg-primary hover:bg-primary/80 text-white text-md font-semibold px-7 py-1.5 mt-5' onClick={handlePlaceOrder}>
-                {ordering===true?<LoadingSpinner size={25} light={true} />:"Place Order"}
+                {ordering===true?<LoadingSpinner size={25} light={true} />:"Check out"}
               </button>
             </div>:""
             }
