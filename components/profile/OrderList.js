@@ -75,15 +75,15 @@ export default function OrderList({list}) {
                   }
                 }else {
                   orderStatus.statusText = "Not Accepted"
-                  orderStatus.message="wait for acceptence"
+                  orderStatus.message="Wait for acceptence"
                   orderStatus.icon = "text-red-800 font-semibold px-3 py-1"
                 }
                 return <tr key={i} className='odd:bg-slate-200/20 hover:bg-slate-200/40'>
                 <td className='w-[10%] text-center'>{quantity}</td>            
                 <td className='w-[20%] text-center text-sm md:text-base'><CurrencyFormat price={totalPrice} /></td>            
                 <td className='w-[20%] text-sm text-center md:text-base'>
-                  <p className={orderStatus.icon}>{orderStatus.statusText}</p>
-                  <p className='text-[12px] text-yellow-500'>{orderStatus.message!==null?orderStatus.message:""}</p>
+                  {item.accepted&&<p className={orderStatus.icon}>{orderStatus.statusText}</p>}
+                  <p className='text-[13px] text-yellow-600 font-semibold sm:text-base'>{orderStatus.message!==null?orderStatus.message:""}</p>
                 </td>          
                 <td className='w-[20%] text-center text-sm md:text-base'>{new Date(item.orderDate).toDateString()}</td>
                 <td className='w-[20%] text-center'>
